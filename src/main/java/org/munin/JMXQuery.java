@@ -48,8 +48,7 @@ public class JMXQuery {
     connection = connector.getMBeanServerConnection();
   }
 
-  private void list() throws IOException, InstanceNotFoundException, IntrospectionException,
-      ReflectionException {
+  private void list() throws IOException, InstanceNotFoundException, IntrospectionException, ReflectionException {
     if (config == null)
       listAll();
     else
@@ -71,8 +70,7 @@ public class JMXQuery {
         }
         output(field.getFieldname(), value, field.getJmxAttributeKey());
       } catch (Exception e) {
-        System.err
-            .println((new StringBuilder()).append("Fail to output ").append(field).toString());
+        System.err.println((new StringBuilder()).append("Fail to output ").append(field).toString());
         e.printStackTrace();
       }
     }
@@ -83,13 +81,11 @@ public class JMXQuery {
     if (attr instanceof CompositeDataSupport) {
       CompositeDataSupport cds = (CompositeDataSupport) attr;
       if (key == null)
-        throw new IllegalArgumentException((new StringBuilder())
-            .append("Key is null for composed data ").append(name).toString());
-      System.out.println((new StringBuilder()).append(name).append(".value ")
-          .append(format(cds.get(key))).toString());
+        throw new IllegalArgumentException((new StringBuilder()).append("Key is null for composed data ").append(name)
+            .toString());
+      System.out.println((new StringBuilder()).append(name).append(".value ").append(format(cds.get(key))).toString());
     } else {
-      System.out.println((new StringBuilder()).append(name).append(".value ").append(format(attr))
-          .toString());
+      System.out.println((new StringBuilder()).append(name).append(".value ").append(format(attr)).toString());
     }
   }
 
@@ -103,13 +99,11 @@ public class JMXQuery {
         key = it.next().toString();
 
     } else {
-      System.out.println((new StringBuilder()).append(name).append(".value ").append(format(attr))
-          .toString());
+      System.out.println((new StringBuilder()).append(name).append(".value ").append(format(attr)).toString());
     }
   }
 
-  private void listAll() throws IOException, InstanceNotFoundException, IntrospectionException,
-      ReflectionException {
+  private void listAll() throws IOException, InstanceNotFoundException, IntrospectionException, ReflectionException {
     Set mbeans = connection.queryNames(null, null);
     for (Iterator i$ = mbeans.iterator(); i$.hasNext();) {
       ObjectName name = (ObjectName) i$.next();
@@ -124,9 +118,8 @@ public class JMXQuery {
         Iterator i2$ = attributes.asList().iterator();
         while (i2$.hasNext()) {
           Attribute attribute = (Attribute) i2$.next();
-          output(
-              (new StringBuilder()).append(name.getCanonicalName()).append("%")
-                  .append(attribute.getName()).toString(), attribute.getValue());
+          output((new StringBuilder()).append(name.getCanonicalName()).append("%").append(attribute.getName())
+              .toString(), attribute.getValue());
         }
       } catch (Exception e) {
         System.err.println((new StringBuilder()).append("error getting ").append(name).append(":")
@@ -155,8 +148,8 @@ public class JMXQuery {
     connector.close();
   }
 
-  public static void main(String args[]) throws IOException, MalformedObjectNameException,
-      NullPointerException, InstanceNotFoundException, IntrospectionException, ReflectionException {
+  public static void main(String args[]) throws IOException, MalformedObjectNameException, NullPointerException,
+      InstanceNotFoundException, IntrospectionException, ReflectionException {
     String url;
     String config_file;
     JMXQuery query;
@@ -191,8 +184,7 @@ public class JMXQuery {
       if (args[i].equals("config")) toconfig = true;
     }
 
-    if (url == null || user != null && pass == null || user == null && pass != null
-        || config_file == null && toconfig) {
+    if (url == null || user != null && pass == null || user == null && pass != null || config_file == null && toconfig) {
       System.err
           .println("Usage of program is:\njava -cp jmxquery.jar org.munin.JMXQuery --url=<URL> [--user=<username> --pass=<password>] [--conf=<config file> [config]]\n, where <URL> is a JMX URL, for example: service:jmx:rmi:///jndi/rmi://HOST:PORT/jmxrmi\nWhen invoked with the config file (see examples folder) - operates as Munin plugin with the provided configuration\nWithout options just fetches all JMX attributes using provided URL");
       System.exit(1);
@@ -201,8 +193,8 @@ public class JMXQuery {
       try {
         Configuration.parse(config_file).report(System.out);
       } catch (Exception e) {
-        System.err.println((new StringBuilder()).append(e.getMessage()).append(" reading ")
-            .append(config_file).toString());
+        System.err.println((new StringBuilder()).append(e.getMessage()).append(" reading ").append(config_file)
+            .toString());
         System.exit(1);
       }
     }
@@ -213,21 +205,19 @@ public class JMXQuery {
     try {
       query.disconnect();
     } catch (IOException e) {
-      System.err.println((new StringBuilder()).append(e.getMessage()).append(" closing ")
-          .append(url).toString());
-    }
-    System.exit(1);
-    try {
-      query.disconnect();
-    } catch (IOException e) {
-      System.err.println((new StringBuilder()).append(e.getMessage()).append(" closing ")
-          .append(url).toString());
+      System.err.println((new StringBuilder()).append(e.getMessage()).append(" closing ").append(url).toString());
+      System.exit(1);
     }
     try {
       query.disconnect();
     } catch (IOException e) {
-      System.err.println((new StringBuilder()).append(e.getMessage()).append(" closing ")
-          .append(url).toString());
+      System.err.println((new StringBuilder()).append(e.getMessage()).append(" closing ").append(url).toString());
+    }
+    try {
+      query.disconnect();
+    } catch (IOException e) {
+      System.err.println((new StringBuilder()).append(e.getMessage()).append(" closing ").append(url).toString());
+      System.exit(1);
     }
   }
 
